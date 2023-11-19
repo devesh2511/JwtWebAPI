@@ -7,6 +7,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
+using JwtWebAPI.Services;
+using System.Xml.Linq;
+using Microsoft.AspNetCore.Identity;
 
 namespace JwtWebAPI.Controllers
 {
@@ -14,22 +17,32 @@ namespace JwtWebAPI.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        public static User user = new User();
         private readonly IConfiguration _configuration;
+        private readonly UserService userService;
 
-        public AuthController(IConfiguration configuration)
+        public AuthController(IConfiguration configuration , UserService userService)
         {
             _configuration = configuration;
+            this.userService = userService;
         }
 
         [HttpPost("register")]
         public async Task<ActionResult<User>> Register(UserDto request)
         {
+            System.Diagnostics.Debug.WriteLine(request.Username);
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
-            user.Username = request.Username;
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
+            var user = new User
+            {
+                Username = request.Username,
+                Name = request.Name,
+                Email = request.Email,
+                Phone = request.Phone,
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt
+            };
+
+            await this.userService.CreateAsync(user);
 
             return Ok(user);
 
@@ -38,18 +51,26 @@ namespace JwtWebAPI.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<string>> Login(UserDto request)
         {
-            if(user.Username != request.Username)
+            var userFound = (await this.userService.GetAsync(request.Username));
+            if (userFound.Username != request.Username)
             {
-                return BadRequest("! User not found");
+                return BadRequest("!User not found");
             }
 
-            if(!VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
+            if(!VerifyPasswordHash(request.Password, userFound.PasswordHash, userFound.PasswordSalt))
             {
                 return BadRequest("Wrong Password");
             }
 
-            string token = CreateToken(user);
-            return Ok(token);
+           
+
+            string token = CreateToken(userFound);
+
+            var message = new MessageDto
+            {
+                message = token
+            };
+            return Ok(message);
 
         }
 
@@ -67,7 +88,7 @@ namespace JwtWebAPI.Controllers
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddDays(1),
+                expires: DateTime.Now.AddMinutes(1),
                 signingCredentials: cred);
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
