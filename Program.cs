@@ -16,10 +16,14 @@ builder.Services.Configure<CleaningServicesDatabaseSettings>(
 builder.Services.Configure<BookingsDatabaseSettings>(
     builder.Configuration.GetSection("BookingsDatabase"));
 
+builder.Services.Configure<ReviewsDatabaseSettings>(
+    builder.Configuration.GetSection("ReviewsDatabase"));
+
 builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<CleaningServicesService>();
 builder.Services.AddSingleton<BookingsService>();
- 
+builder.Services.AddSingleton<ReviewsServices>();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

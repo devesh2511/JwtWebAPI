@@ -17,6 +17,8 @@ namespace JwtWebAPI.Models
         [BsonElement("Name")]
         public string ServiceName { get; set; } = null!;
 
+        public string ServiceId { get; set; } = null!;
+
         public string Username { get; set; } = null!;
 
         public string PaymentId { get; set; } = null!;

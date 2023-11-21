@@ -62,7 +62,6 @@ namespace JwtWebAPI.Controllers
                 return BadRequest("Wrong Password");
             }
 
-           
 
             string token = CreateToken(userFound);
 

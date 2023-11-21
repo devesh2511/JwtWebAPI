@@ -1,6 +1,9 @@
 ﻿using JwtWebAPI.Models;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace JwtWebAPI.Services;
 
@@ -27,6 +30,7 @@ public class BookingsService
     public async Task<Bookings?> GetAsync(string id) =>
         await _bookingsCollection.Find(x => x.BookingId == id).FirstOrDefaultAsync();
 
+   
     public async Task CreateAsync(Bookings newBooking) =>
         await _bookingsCollection.InsertOneAsync(newBooking);
 
@@ -35,4 +39,13 @@ public class BookingsService
 
     public async Task RemoveAsync(string id) =>
         await _bookingsCollection.DeleteOneAsync(x => x.BookingId == id);
+
+    public async Task<List<Bookings>> GetAllBookingsForUsername(string username)
+    {
+
+        return await _bookingsCollection.Find(x => x.Username == username).ToListAsync();
+     
+    }
 }
+
+     

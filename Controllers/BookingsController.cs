@@ -19,6 +19,8 @@ public class BookingsController : ControllerBase
     public async Task<List<Bookings>> Get() =>
         await _bookingsService.GetAsync();
 
+
+
     [HttpGet("{BookingId}")]
     public async Task<ActionResult<Bookings>> Get(string BookingId)
     {
@@ -31,6 +33,7 @@ public class BookingsController : ControllerBase
 
         return bookings;
     }
+    
 
     [HttpPost]
     public async Task<IActionResult> Post(Bookings newBookings)
@@ -70,5 +73,16 @@ public class BookingsController : ControllerBase
         await _bookingsService.RemoveAsync(BookingId);
 
         return NoContent();
+    }
+
+    [HttpGet("getbyuser/{username}")]
+    public async Task<IActionResult> GetAllBookingsForUsername(string username)
+    {
+        var bookings = await _bookingsService.GetAllBookingsForUsername(username);
+        if (bookings == null)
+        {
+            return NotFound();
+        }
+        return Ok(bookings);
     }
 }
