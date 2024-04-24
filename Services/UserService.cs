@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using JwtWebAPI.Models;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace JwtWebAPI.Services;

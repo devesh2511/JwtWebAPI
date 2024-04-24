@@ -10,6 +10,8 @@ using System.IdentityModel.Tokens.Jwt;
 using JwtWebAPI.Services;
 using System.Xml.Linq;
 using Microsoft.AspNetCore.Identity;
+using JwtWebAPI.DTO;
+using JwtWebAPI.Models;
 
 namespace JwtWebAPI.Controllers
 {

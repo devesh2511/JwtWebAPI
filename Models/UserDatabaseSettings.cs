@@ -1,4 +1,4 @@
-﻿namespace JwtWebAPI
+﻿namespace JwtWebAPI.Models
 {
     public class UserDatabaseSettings
     {

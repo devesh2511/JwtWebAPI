@@ -1,13 +1,13 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using System.Numerics;
 
-namespace JwtWebAPI
+namespace JwtWebAPI.Models
 {
     public class User
     {
-        public string Username { get; set; } = String.Empty;
-        public string Name { get; set; } = String.Empty;
-        public string Email { get; set; } = String.Empty;
+        public string Username { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
         public long Phone { get; set; }
         //public Booking[] Bookings { get; set; }
         public byte[] PasswordHash { get; set; }
